@@ -296,7 +296,13 @@ export default function HomePage() {
             <motion.div variants={fadeInUp} className="relative">
               <div className="w-full p-2  rounded-2xl bg-gradient-to-br from-blue-600/20 to-purple-600/20 border border-white/10 flex items-center justify-center">
                 {/* <div className="text-8xl gradient-text font-bold">HH</div> */}
-                <Image alt="about" className="w-full h-full object-cover rounded-lg" src={require("../../public/about-img.webp")} />
+                <Image
+                  alt="about"
+                  src="/about-img.webp"
+                  width={500}
+                  height={500}
+                  className="w-full h-full object-cover rounded-lg"
+                />
               </div>
               <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center">
                 <Award className="w-12 h-12 text-white" />
@@ -376,7 +382,7 @@ export default function HomePage() {
                     <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
                   ))}
                 </div>
-                <p className="text-gray-300 mb-6 italic">"{testimonial.content}"</p>
+                <p className="text-gray-300 mb-6 italic">&ldquo;{testimonial.content}&rdquo;</p>
                 <div>
                   <div className="font-semibold">{testimonial.name}</div>
                   <div className="text-gray-400 text-sm">{testimonial.role}</div>
