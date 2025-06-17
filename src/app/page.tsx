@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "../hooks/useTranslation";
 import {
   Phone,
@@ -21,6 +22,7 @@ import Image from "next/image";
 
 export default function HomePage() {
   const { t, language, switchLanguage } = useTranslation();
+  const [mobileLangOpen, setMobileLangOpen] = useState(false);
 
   const fadeInUp = {
     initial: { opacity: 0, y: 60 },
@@ -98,6 +100,45 @@ export default function HomePage() {
     </div>
   );
 
+  const LanguageSwitcherMobile = () => (
+    <div className="relative">
+      <div className="flex items-center gap-2">
+        <button
+          onClick={() => setMobileLangOpen(!mobileLangOpen)}
+          className="text-sm text-gray-300 hover:text-white transition-colors">
+          <Globe className="w-7 h-7 text-white" />
+        </button>
+      </div>
+      <AnimatePresence>
+        {mobileLangOpen && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className="absolute mt-2 right-0 bg-gray-800 text-white rounded-md shadow-lg z-50 ring-1 ring-white/20">
+            <button
+              onClick={() => {
+                switchLanguage("en");
+                setMobileLangOpen(false);
+              }}
+              className="block w-full text-left px-4 py-2 hover:bg-gray-700 transition-colors">
+              English
+            </button>
+            <button
+              onClick={() => {
+                switchLanguage("ar");
+                setMobileLangOpen(false);
+              }}
+              className="block w-full text-left px-4 py-2 hover:bg-gray-700 transition-colors">
+              العربية
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Navigation */}
@@ -129,16 +170,21 @@ export default function HomePage() {
               </a>
               <LanguageSwitcher />
             </div>
-            <motion.a
-              href="#contact"
-              className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-2 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}>
-              {t("nav.getInTouch")}
-            </motion.a>
+            <div className="flex items-center gap-1">
+              <div className="md:hidden mx-1">
+                <LanguageSwitcherMobile />
+              </div>
+              <motion.a
+                href="#contact"
+                className="px-3 py-2 sm:px-4 md:px-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 sm:text-[14px]"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}>
+                {t("nav.getInTouch")}
+              </motion.a>
+            </div>
           </div>
         </div>
-      </motion.nav>{" "}
+      </motion.nav>
       {/* Hero Section */}
       <section
         id="home"
