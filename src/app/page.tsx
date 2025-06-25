@@ -17,12 +17,10 @@ import {
   ChevronDown,
   ExternalLink,
   Globe,
-  FileText,
   BarChart3,
   Smartphone,
   Trophy,
   Shield,
-  MapPinIcon,
   HelpCircle,
   CheckCircle,
 } from "lucide-react";
