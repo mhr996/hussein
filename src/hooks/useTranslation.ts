@@ -14,17 +14,26 @@ const translations = {
       name: "Hussein Housh",
       title: "Premier Real Estate Agent in Dubai",
       description:
-        "Transforming dreams into reality with unparalleled expertise in Dubai's luxury real estate market. Your trusted partner in finding the perfect property in the heart of the UAE.",
+        "You don't need to be an expert or have a fortune. All you need is: a smart decision and a bold first step.",
+      investmentDetails: {
+        title: "Let me explain with simple numbers:",
+        propertyPrice: "Property Price: $270,000",
+        downPayment: "Down Payment: $50,000",
+        monthlyInstallment: "Monthly Payment: $2,000",
+        delivery: "Delivery: After 3 years",
+        tenantCoverage: "Tenant covers the remaining (40%) from rent",
+      },
+      ctaText: "Register your information and start your investment journey today",
       contactMe: "Contact Me",
       viewServices: "View Services",
     },
     about: {
-      title: "About",
+      title: "Who is Hussein?",
       name: "Hussein Housh",
       description1:
-        "With over 15 years of experience in Dubai's dynamic real estate market, I have established myself as a trusted advisor for discerning clients seeking exceptional properties in the world's most vibrant city.",
+        "I am Hussein Housh, your real estate consultant in Dubai, and my goal is to be your real partner in reaching your real estate dream with confidence and clear steps.",
       description2:
-        "My deep understanding of Dubai's neighborhoods, market trends, and luxury developments ensures that every client receives personalized service and achieves their real estate goals.",
+        "I don't treat you as just a client, but as an investor with ambition, and I'm here to help you achieve it with calculated steps, regardless of your experience, job, or budget. I'm with you from the first consultation... until you hold the key to your home in your hand.",
       achievements: {
         propertiesSold: "Properties Sold",
         yearsExperience: "Years Experience",
@@ -60,16 +69,16 @@ const translations = {
       title: "Client Testimonials",
       subtitle: "Don't just take my word for it. Here's what my satisfied clients have to say.",
       client1: {
-        name: "Sarah Al-Mansouri",
-        role: "Property Investor",
+        name: "Limona Al-Saleh",
+        role: "Syrian Media Professional",
         content:
-          "Hussein helped me find the perfect investment property in Downtown Dubai. His expertise and dedication are unmatched.",
+          "Thank you Hussein for your kind treatment and clear explanations to all my inquiries. Within just 24 hours, I decided to register for a property through you. As a media professional, I can recognize professional and honest people, and you are truly one of them. I recommended many of my friends to work with you because you are a reliable real estate consultant who doesn't leave anyone halfway. You continue to follow up and communicate with an open heart. I wish you all the best and may God bless you with even better things in your future.",
       },
       client2: {
-        name: "Michael Johnson",
-        role: "Homebuyer",
+        name: "Amer Al-Sabbagh",
+        role: "Entrepreneur",
         content:
-          "Professional, knowledgeable, and always available. Hussein made our home buying process seamless and stress-free.",
+          "Peace be upon you brother Hussein... I wanted to thank you for your efforts that enabled my sister and me to purchase two apartments in the Ben Gatti Sky Rise project. Thank God, thanks to your follow-up, quick response, and excellent service, we got excellent options within the proposed project. Thank you very much.",
       },
       client3: {
         name: "Fatima Hassan",
@@ -118,17 +127,26 @@ const translations = {
       name: "حسين حوش",
       title: "وكيل عقارات متميز في دبي",
       description:
-        "نحول الأحلام إلى حقيقة بخبرة لا مثيل لها في سوق العقارات الفاخرة في دبي. شريكك الموثوق في العثور على العقار المثالي في قلب دولة الإمارات العربية المتحدة.",
+        "ما بتحتاج تكون خبير، ولا تملك ثروة. كل يلي بتحتاجه هو: قرار ذكي وخطوة أولى جريئة.",
+      investmentDetails: {
+        title: "خليني أشرحلك بأرقام بسيطة:",
+        propertyPrice: "سعر العقار: 270,000 دولار",
+        downPayment: "الدفعة الأولى: 50,000 دولار",
+        monthlyInstallment: "قسط شهري: 2,000 دولار",
+        delivery: "الاستلام: بعد 3 سنوات",
+        tenantCoverage: "المستأجر بيكملك الباقي (40%) من الإيجار",
+      },
+      ctaText: "سجّل معلوماتك وابدأ رحلتك الاستثمارية اليوم",
       contactMe: "اتصل بي",
       viewServices: "عرض الخدمات",
     },
     about: {
-      title: "عن",
+      title: "مين حسين؟",
       name: "حسين حوش",
       description1:
-        "بخبرة تزيد عن 15 عامًا في سوق العقارات الديناميكي في دبي، ترسخت مكانتي كمستشار موثوق للعملاء المميزين الذين يبحثون عن عقارات استثنائية في أكثر مدن العالم حيوية.",
+        "أنا حسين حوش، مستشارك العقاري في دبي، وهدفي أكون شريكك الحقيقي للوصول لحلمك العقاري بثقة وخطوات واضحة.",
       description2:
-        "فهمي العميق لأحياء دبي واتجاهات السوق والتطوير الفاخر يضمن حصول كل عميل على خدمة شخصية وتحقيق أهدافه العقارية.",
+        "ما بتعامل معك كمجرد عميل، بل كمستثمر عنده طموح وأنا موجود لساعدك تحققه بخطوات مدروسة، مهما كانت خبرتك أو وظيفتك أو ميزانيتك. أنا معك من أول استشارة… لحد ما تمسك مفتاح بيتك بيدك.",
       achievements: {
         propertiesSold: "عقار مباع",
         yearsExperience: "سنة خبرة",
@@ -160,16 +178,16 @@ const translations = {
       title: "آراء العملاء",
       subtitle: "لا تأخذ كلامي فقط. إليك ما يقوله عملائي الراضون.",
       client1: {
-        name: "سارة المنصوري",
-        role: "مستثمرة عقارية",
+        name: "ليمونة الصالح",
+        role: "إعلامية سورية",
         content:
-          "ساعدني حسين في العثور على عقار الاستثمار المثالي في وسط دبي. خبرته وتفانيه لا مثيل لهما.",
+          "يسعد أوقاتك استاذ حسين حابة اتشكرك على تعاملك اللطيف معي والإيضاحات يلي وضحتها لكل استفساراتي حتى لدرجة خلال 24 ساعة فقط قررت سجل على عقار عن طريقك ،واليوم أنا كإعلامية بقدر اكتشف الأشخاص المهنيين والصادقين وانت حقيقة منهم ونصحت كتار من أصدقائي بالتعامل معك لأنك مستشار عقاري يُعتمد عليه وما بتترك حدا بنص الطريق على العكس بتبقى متابع والتواصل معك بكل رحابة صدر ،بدي اتمنالك الخير والرب يرزقك وللأفضل في كل شيء لمستقبلك القادم ان شاء الله",
       },
       client2: {
-        name: "مايكل جونسون",
-        role: "مشتري منزل",
+        name: "عامر الصباغ",
+        role: "رائد أعمال",
         content:
-          "مهني ومعرفة واسعة ومتاح دائمًا. جعل حسين عملية شراء منزلنا سلسة وخالية من التوتر.",
+          "السلام عليكم أخ حسين......حبيت اتشكرك على جهودك يلي مكنتنا من شراء شقتين أنا و أختي بمشروع بن غاطي سكاي رايز. الحمد لله بفضل متابعتك و سرعة الاستجابة و الخدمة الممتازة كانت النتيجة انه حصلنا على خيارات ممتازة ضمن المشروع المطروح. شكرا جزيلا",
       },
       client3: {
         name: "فاطمة حسن",

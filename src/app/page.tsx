@@ -17,6 +17,14 @@ import {
   ChevronDown,
   ExternalLink,
   Globe,
+  FileText,
+  BarChart3,
+  Smartphone,
+  Trophy,
+  Shield,
+  MapPinIcon,
+  HelpCircle,
+  CheckCircle,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -200,7 +208,7 @@ export default function HomePage() {
               className={`text-center ${
                 language === "en" ? "lg:text-left" : "lg:text-right"
               } hero-content-column hero-content`}>
-              <motion.div
+              {/* <motion.div
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
@@ -210,11 +218,11 @@ export default function HomePage() {
                     <span className="text-2xl lg:text-4xl font-bold gradient-text">HH</span>
                   </div>
                 </div>
-              </motion.div>
+              </motion.div> */}
               <motion.h1 {...fadeInUp} className="text-4xl lg:text-6xl xl:text-7xl font-bold mb-6">
                 <span className="gradient-text">{t("hero.name")}</span>
               </motion.h1>
-              <motion.p
+              {/* <motion.p
                 {...fadeInUp}
                 transition={{ delay: 0.2 }}
                 className="text-lg lg:text-xl xl:text-2xl text-gray-300 mb-4">
@@ -225,7 +233,72 @@ export default function HomePage() {
                 transition={{ delay: 0.4 }}
                 className="text-base lg:text-lg text-gray-400 mb-8 lg:mb-12">
                 {t("hero.description")}
-              </motion.p>{" "}
+              </motion.p> */}
+
+              <motion.div
+                {...fadeInUp}
+                transition={{ delay: 0.5 }}
+                className="mb-8 lg:min-w-[600px] lg:mb-12 p-6 rounded-2xl ">
+                <h3
+                  className={`text-lg lg:text-xl font-semibold mb-4 text-blue-400  text-left
+                  }`}>
+                  {t("hero.investmentDetails.title")}
+                </h3>
+                <ul className={`space-y-3 ${language === "en" ? "text-left" : "text-right"}`}>
+                  <li
+                    className={`flex items-start gap-2 ${
+                      language === "en" ? "flex-row justify-start" : "flex-row-reverse justify-end"
+                    }`}>
+                    <span className="text-blue-400 mt-1">1.</span>
+                    <span className="text-gray-300">
+                      {t("hero.investmentDetails.propertyPrice")}
+                    </span>
+                  </li>
+                  <li
+                    className={`flex items-start gap-2 ${
+                      language === "en" ? "flex-row justify-start" : "flex-row-reverse justify-end"
+                    }`}>
+                    <span className="text-blue-400 mt-1">2.</span>
+                    <span className="text-gray-300">{t("hero.investmentDetails.downPayment")}</span>
+                  </li>
+                  <li
+                    className={`flex items-start gap-2 ${
+                      language === "en" ? "flex-row justify-start" : "flex-row-reverse justify-end"
+                    }`}>
+                    <span className="text-blue-400 mt-1">3.</span>
+                    <span className="text-gray-300">
+                      {t("hero.investmentDetails.monthlyInstallment")}
+                    </span>
+                  </li>
+                  <li
+                    className={`flex items-start gap-2 ${
+                      language === "en" ? "flex-row justify-start" : "flex-row-reverse justify-end"
+                    }`}>
+                    <span className="text-blue-400 mt-1">4.</span>
+                    <span className="text-gray-300">{t("hero.investmentDetails.delivery")}</span>
+                  </li>
+                  <li
+                    className={`flex items-start gap-2 ${
+                      language === "en" ? "flex-row justify-start" : "flex-row-reverse justify-end"
+                    }`}>
+                    <span className="text-blue-400 mt-1">5.</span>
+                    <span className="text-gray-300">
+                      {t("hero.investmentDetails.tenantCoverage")}
+                    </span>
+                  </li>
+                </ul>
+              </motion.div>
+
+              <motion.div
+                {...fadeInUp}
+                transition={{ delay: 0.6 }}
+                className={`mb-8 lg:mb-12 text-center ${
+                  language === "en" ? "lg:text-left" : "lg:text-right"
+                }`}>
+                <p className="text-base lg:text-lg text-blue-400 font-medium">
+                  👇 {t("hero.ctaText")}
+                </p>
+              </motion.div>
               <motion.div
                 {...fadeInUp}
                 transition={{ delay: 0.6 }}
@@ -318,8 +391,8 @@ export default function HomePage() {
             viewport={{ once: true }}
             className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div variants={fadeInUp}>
-              <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                {t("about.title")} <span className="gradient-text">{t("about.name")}</span>
+              <h2 className="text-4xl pb-2 md:text-5xl font-bold mb-6 gradient-text">
+                {t("about.title")}
               </h2>
               <p className="text-gray-300 text-lg mb-6">{t("about.description1")}</p>
               <p className="text-gray-300 text-lg mb-8">{t("about.description2")}</p>
@@ -357,6 +430,422 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Investment Tools Section */}
+      <section id="investment-tools" className="py-20 bg-black">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              <span className="gradient-text">
+                {language === "en"
+                  ? "Learn More About Your Real Estate Investment in Dubai"
+                  : "اعرف أكثر عن استثمارك العقاري في دبي"}
+              </span>
+            </h2>
+            <p className="text-gray-300 text-lg max-w-4xl mx-auto">
+              {language === "en"
+                ? "Before you start your investment, know the most important official tools that help you make the right investment decisions and make you a controlled and conscious investor"
+                : "قبل ما تبدأ، إستثمارك إعرف أهم الأدوات الرسمية اللي بتساعدك تاخد قرارات استثمارية صح وتخليك متحكم ومستثمر واعي"}
+            </p>
+          </motion.div>
+
+          <motion.div
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            className="grid md:grid-cols-3 gap-8">
+            <motion.div
+              variants={fadeInUp}
+              className="p-8 rounded-2xl bg-gradient-to-br from-blue-600/10 to-purple-600/10 border border-white/10 hover:border-blue-500/30 transition-all duration-300 group"
+              whileHover={{ y: -10 }}>
+              <div className="w-16 h-16 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <Building className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold mb-4 text-blue-400">
+                {language === "en" ? "Dubai Land Department" : "دائرة الأراضي والأملاك"}
+              </h3>
+              <p className="text-gray-300 mb-6">
+                {language === "en"
+                  ? "Know the annual service charges for your project and track official ownership status through the official platform."
+                  : "من خلالها بتعرف أسعار الرسوم السنوية (Service Charge) على المشروع اللي ناوي تستثمر فيه، وكمان تتابع وضع الملكية الرسمية."}
+              </p>
+              <a
+                href="https://dubailand.gov.ae/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors">
+                {language === "en" ? "Visit Website" : "زيارة الموقع"}
+                <ExternalLink className="w-4 h-4" />
+              </a>
+            </motion.div>
+
+            <motion.div
+              variants={fadeInUp}
+              className="p-8 rounded-2xl bg-gradient-to-br from-blue-600/10 to-purple-600/10 border border-white/10 hover:border-blue-500/30 transition-all duration-300 group"
+              whileHover={{ y: -10 }}>
+              <div className="w-16 h-16 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <BarChart3 className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold mb-4 text-blue-400">DXB Interact</h3>
+              <p className="text-gray-300 mb-6">
+                {language === "en"
+                  ? "A platform that gives you real data about rental prices, sales, and purchases in the project or area you're interested in."
+                  : "منصة بتعطيك بيانات حقيقية عن أسعار الإيجارات، البيع، والشراء في المشروع أو المنطقة اللي مهتم فيها، حتى تختار بعقل."}
+              </p>
+              <a
+                href="https://dxbinteract.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors">
+                {language === "en" ? "Visit Website" : "زيارة الموقع"}
+                <ExternalLink className="w-4 h-4" />
+              </a>
+            </motion.div>
+
+            <motion.div
+              variants={fadeInUp}
+              className="p-8 rounded-2xl bg-gradient-to-br from-blue-600/10 to-purple-600/10 border border-white/10 hover:border-blue-500/30 transition-all duration-300 group"
+              whileHover={{ y: -10 }}>
+              <div className="w-16 h-16 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <Smartphone className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold mb-4 text-blue-400">
+                {language === "en" ? "Dubai REST App" : "تطبيق Dubai REST"}
+              </h3>
+              <p className="text-gray-300 mb-6">
+                {language === "en"
+                  ? "Helps you verify if the developer has an escrow account for projects and track their delivered projects and delivery history."
+                  : "بيساعدك تتأكد إذا المطور العقاري عنده حساب ضمان للمشاريع، وكمان تتابع مشاريعهم المسلمة وتاريخ تسليمها."}
+              </p>
+              <a
+                href="https://dubailand.gov.ae/en/eservices/dubai-rest/#/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors">
+                {language === "en" ? "Visit Website" : "زيارة الموقع"}
+                <ExternalLink className="w-4 h-4" />
+              </a>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Why Dubai Section */}
+      <section
+        id="why-dubai"
+        className="py-20 bg-gradient-to-b from-black to-gray-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-purple-900/10"></div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              <span className="gradient-text">
+                {language === "en" ? "Why Dubai? Dubai by Numbers" : "ليش دبي؟ دبي بالأرقام"}
+              </span>
+            </h2>
+            <p className="text-gray-300 text-lg max-w-4xl mx-auto mb-8">
+              {language === "en"
+                ? "Before you start your investment, let me be honest with you: If you're a real investor, dreaming of a better future, and ready to take a smart step, Dubai is the golden opportunity that doesn't repeat."
+                : "قبل ما تبدأ استثمارك، خليني أكون صريح معك: لو أنت مستثمر حقيقي، بتحلم بمستقبل أفضل، ومستعد تخطو خطوة ذكية، فدبي هي الفرصة الذهبية يلي ما بتتكرر."}
+            </p>
+            <p className="text-blue-400 text-lg font-semibold">
+              {language === "en"
+                ? "7 numbers and reasons that prove why Dubai is the top destination for investors worldwide:"
+                : "7 أرقام وأسباب بتثبت ليش دبي هي الوجهة الأولى للمستثمرين حول العالم:"}
+            </p>
+          </motion.div>
+          <motion.div
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+            {[
+              {
+                number: "0%",
+                title: language === "en" ? "Income Tax" : "ضرائب على الدخل",
+                description:
+                  language === "en"
+                    ? "Every dirham you earn stays yours"
+                    : "كل درهم بتربحه يظل إلك",
+              },
+              {
+                number: "6-9%",
+                title: language === "en" ? "Annual ROI" : "عائد استثماري سنوي",
+                description:
+                  language === "en"
+                    ? "Continuous income from your real estate investment"
+                    : "دخل مستمر من استثمارك العقاري",
+              },
+              {
+                number: "100%",
+                title: language === "en" ? "Foreign Ownership" : "ملكية للأجانب",
+                description:
+                  language === "en"
+                    ? "Your home in your name, with investor residency"
+                    : "بيتك باسمك، مع إقامة مستثمر",
+              },
+              {
+                number: "200+",
+                title: language === "en" ? "Nationalities" : "جنسية",
+                description:
+                  language === "en"
+                    ? "Living together without complications"
+                    : "عايشة مع بعض بدون تعقيد",
+              },
+            ].map((stat, index) => (
+              <motion.div
+                key={index}
+                variants={fadeInUp}
+                className="text-center p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300">
+                <div className="text-4xl font-bold gradient-text mb-2">{stat.number}</div>
+                <div className="text-lg font-semibold text-blue-400 mb-2">{stat.title}</div>
+                <div className="text-gray-400 text-sm">{stat.description}</div>
+              </motion.div>
+            ))}
+          </motion.div>
+          <motion.div
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            className="grid md:grid-cols-3 gap-6 mb-12">
+            {[
+              {
+                icon: Trophy,
+                title:
+                  language === "en"
+                    ? "Golden Visa & Long-term Visas"
+                    : "إقامة ذهبية وتأشيرات طويلة الأمد",
+                description:
+                  language === "en"
+                    ? "Your investment protects you and your family"
+                    : "استثمارك يحميك ويحمي عيلتك",
+              },
+              {
+                icon: Shield,
+                title: language === "en" ? "Safe & Sophisticated City" : "مدينة آمنة وراقية",
+                description: language === "en" ? "With a luxurious lifestyle" : "مع نمط حياة فاخر",
+              },
+              {
+                icon: Globe,
+                title: language === "en" ? "Global Strategic Location" : "موقع استراتيجي عالمي",
+                description: language === "en" ? "Easy travel anywhere" : "سهولة السفر لأي مكان",
+              },
+            ].map((benefit, index) => (
+              <motion.div
+                key={index}
+                variants={fadeInUp}
+                className="p-6 rounded-2xl bg-gradient-to-br from-blue-600/10 to-purple-600/10 border border-white/10 hover:border-blue-500/30 transition-all duration-300 group">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <benefit.icon className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-lg font-semibold mb-3 text-blue-400">{benefit.title}</h3>
+                <p className="text-gray-300">{benefit.description}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="text-center">
+            <div className="mb-8">
+              <p className="text-xl text-red-400 font-bold mb-4">
+                🔥{" "}
+                {language === "en"
+                  ? "The opportunity is in front of you, and those who started long ago now have steady income and real estate assets."
+                  : "الفرصة قدامك، واللي بلّشوا من زمان صار عندهم دخل ثابت وأصول عقارية حقيقية."}
+              </p>
+              <p className="text-2xl font-bold text-white mb-6">
+                {language === "en" ? "What are you waiting for?" : "شو ناطر؟"}
+              </p>
+            </div>
+            <motion.a
+              href="#contact"
+              className="inline-flex items-center gap-3 bg-gradient-to-r from-red-600 to-orange-600 px-8 py-4 rounded-full text-lg font-bold text-white hover:from-red-700 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}>
+              <span>
+                {language === "en"
+                  ? "Start Your Investment Journey With Me Today"
+                  : "ابدأ رحلتك الاستثمارية معي اليوم"}
+              </span>
+              <Phone className="w-5 h-5" />
+            </motion.a>
+          </motion.div>{" "}
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section id="faq" className="py-20 bg-black">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              <span className="gradient-text">
+                {language === "en" ? "Frequently Asked Questions" : "الأسئلة الشائعة (الإعتراضات)"}
+              </span>
+            </h2>
+            <p className="text-gray-300 text-lg max-w-4xl mx-auto">
+              {language === "en"
+                ? "Common questions and inquiries from investors"
+                : "الأسئلة الشائعة والاستفسارات من المستثمرين"}
+            </p>
+          </motion.div>
+
+          <motion.div
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            className="grid md:grid-cols-2 gap-8">
+            {[
+              {
+                question:
+                  language === "en"
+                    ? "Is there real demand for real estate in Dubai?"
+                    : "هل في طلب حقيقي على العقارات في دبي؟",
+                answer:
+                  language === "en"
+                    ? "Yes, Dubai enjoys an active real estate market with continuous demand from residents and tenants. Due to population growth, strong infrastructure, and welcoming foreign investors, demand for rental and purchase is constant and stable."
+                    : "نعم، دبي تتمتع بسوق عقاري نشط مع طلب مستمر من السكان والمستأجرين. بسبب النمو السكاني، والبنية التحتية القوية، واحتضان المستثمرين الأجانب، الطلب على الإيجار والشراء دائم ومستقر.",
+              },
+              {
+                question:
+                  language === "en"
+                    ? "Will anyone rent my property after delivery?"
+                    : "هل في حد بيستأجر عقاري بعد التسليم؟",
+                answer:
+                  language === "en"
+                    ? "Yes, Dubai's rental market is very strong, especially in prime areas. You can rely on stable rental income after receiving the property, with property management companies helping you rent the property effortlessly."
+                    : "نعم، سوق الإيجارات في دبي قوي جداً، وخاصة في المناطق الحيوية. يمكنك الاعتماد على دخل إيجاري ثابت بعد استلام العقار، مع وجود شركات إدارة عقارية تساعدك في تأجير العقار بدون عناء.",
+              },
+              {
+                question:
+                  language === "en"
+                    ? "How can I guarantee my investment? Will the developer deliver on time and with required quality?"
+                    : "كيف بضمان استثماري؟ هل المطور بيسلمني المشروع على الوقت وبالجودة المطلوبة؟",
+                answer:
+                  language === "en"
+                    ? "Dubai Land Department imposes strict laws on developers, including having an escrow account that guarantees project completion and delivery. Additionally, official contracts protect your rights, and you can track the project through official apps like Dubai REST."
+                    : "دائرة الأراضي والأملاك في دبي تفرض قوانين صارمة على المطورين، ومنها وجود حساب ضمان (Escrow Account) يضمن استكمال المشروع وتسليمه. بالإضافة، العقود الرسمية تضمن حقوقك، ويمكنك متابعة المشروع من خلال تطبيقات رسمية مثل Dubai REST.",
+              },
+              {
+                question:
+                  language === "en"
+                    ? "Do I need to be a resident or present in Dubai to invest?"
+                    : "هل لازم أكون مقيم أو موجود في دبي للاستثمار؟",
+                answer:
+                  language === "en"
+                    ? "No, it's not necessary to be a resident or present in Dubai to invest. You can manage your investment remotely through certified agents and professional property management services."
+                    : "لا، ليس من الضروري أن تكون مقيمًا أو متواجدًا في دبي للاستثمار. يمكنك إدارة استثمارك عن بعد من خلال وكلاء معتمدين وخدمات إدارة عقارات محترفة.",
+              },
+              {
+                question:
+                  language === "en"
+                    ? "Is ownership free for all nationalities?"
+                    : "هل التملك حر لجميع الجنسيات؟",
+                answer:
+                  language === "en"
+                    ? "Yes, Dubai allows 100% freehold ownership for foreigners in designated areas, with full government protection and clear rights."
+                    : "نعم، دبي تتيح التملك الحر 100% للأجانب في المناطق المخصصة لذلك، مع حماية كاملة من الحكومة وحقوق واضحة.",
+              },
+              {
+                question:
+                  language === "en"
+                    ? "Is my investment legally guaranteed?"
+                    : "هل استثماري مضمون من ناحية القوانين؟",
+                answer:
+                  language === "en"
+                    ? "Yes, Dubai provides a transparent and regulated legal environment to protect investors, with real estate market regulation laws and direct supervision from the Land Department."
+                    : "نعم، دبي توفر بيئة قانونية شفافة ومحكمة لحماية المستثمرين، مع قوانين تنظيم السوق العقاري والإشراف المباشر من دائرة الأراضي.",
+              },
+              {
+                question:
+                  language === "en"
+                    ? "Do I need prior experience or knowledge of real estate investment in Dubai?"
+                    : "هل أحتاج خبرة أو معرفة مسبقة بالاستثمار العقاري في دبي؟",
+                answer:
+                  language === "en"
+                    ? "No, our role as consultants is to guide you step by step and provide all the necessary support to make sound investment decisions."
+                    : "لا، دورنا كمستشارين هو توجيهك خطوة بخطوة، وتقديم كل الدعم اللازم لاتخاذ قرارات استثمارية صحيحة.",
+              },
+              {
+                question:
+                  language === "en"
+                    ? "Can I sell or exit the investment easily?"
+                    : "هل ممكن أبيع أو أخرج من الاستثمار بسهولة؟",
+                answer:
+                  language === "en"
+                    ? "Yes, Dubai's real estate market is very liquid with demand for property purchases, especially in prime areas. There are also options for easy resale through a wide network of buyers."
+                    : "نعم، سوق دبي العقاري سيّال جداً ويوجد طلب على شراء العقارات، خاصة في المناطق الرئيسية. كما أن هناك خيارات لإعادة البيع بسهولة عبر شبكة واسعة من المشترين.",
+              },
+            ].map((faq, index) => (
+              <motion.div
+                key={index}
+                variants={fadeInUp}
+                className="p-6 rounded-2xl bg-gradient-to-br from-blue-600/5 to-purple-600/5 border border-white/10 hover:border-blue-500/30 transition-all duration-300 group">
+                <div className="flex items-start gap-4 mb-4">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                    <HelpCircle className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className={`text-lg font-semibold text-blue-400 `}>{faq.question}</h3>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-green-600 to-emerald-600 flex items-center justify-center flex-shrink-0">
+                    <CheckCircle className="w-6 h-6 text-white" />
+                  </div>
+                  <p
+                    className={`text-gray-300 leading-relaxed `}
+                    dir={language === "ar" ? "rtl" : "ltr"}>
+                    {faq.answer}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="text-center mt-16">
+            <p className="text-lg text-gray-300 mb-6">
+              {language === "en"
+                ? "Still have questions? Let's discuss your investment opportunities."
+                : "لسه عندك أسئلة؟ يلا نناقش فرصك الاستثمارية."}
+            </p>
+            <motion.a
+              href="#contact"
+              className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-4 rounded-full text-lg font-semibold text-white hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}>
+              <span>
+                {language === "en" ? "Get Your Questions Answered" : "احصل على إجابات لأسئلتك"}
+              </span>
+              <Phone className="w-5 h-5" />
+            </motion.a>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Services Section */}
       <section id="services" className="py-20 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -554,6 +1043,141 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Construction Companies Section */}
+      <section id="developers" className="py-20 bg-gradient-to-b from-black to-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              <span className="gradient-text">شركات الإنشاء</span>
+            </h2>
+            <p className="text-gray-300 text-lg max-w-4xl mx-auto">
+              {language === "en"
+                ? "Leading real estate developers in Dubai with their official websites"
+                : "أكبر شركات التطوير العقاري في دبي مع روابط مواقعهم الرسمية"}
+            </p>
+          </motion.div>
+
+          <motion.div
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {[
+              {
+                name: "اعمار",
+                url: "https://properties.emaar.com/ar/",
+                englishName: "Emaar",
+              },
+              {
+                name: "نخيل",
+                url: "https://nakheeldevelopments.com/ar/home-page/",
+                englishName: "Nakheel",
+              },
+              {
+                name: "ميراس",
+                url: "https://marasdev.com/",
+                englishName: "Meraas",
+              },
+              {
+                name: "امنيات",
+                url: "https://www.omniyat.com/",
+                englishName: "Omniyat",
+              },
+              {
+                name: "شوبا",
+                url: "https://sobharealty.com/ar/",
+                englishName: "Sobha",
+              },
+              {
+                name: "داماك",
+                url: "https://www.damacproperties.com/ar/",
+                englishName: "Damac",
+              },
+              {
+                name: "بن غاطي",
+                url: "https://binghatti-realestate.com/",
+                englishName: "Binghatti",
+              },
+              {
+                name: "امتياز",
+                url: "https://imtiaz.ae/",
+                englishName: "Imtiaz",
+              },
+              {
+                name: "سمانا",
+                url: "https://www.samanadevelopers.com/",
+                englishName: "Samana",
+              },
+              {
+                name: "عزيزي",
+                url: "https://www.azizidevelopments.com/ar",
+                englishName: "Azizi",
+              },
+              {
+                name: "شركة HRE",
+                url: "https://hredevelopment.com/",
+                englishName: "HRE Development",
+              },
+            ].map((company, index) => (
+              <motion.div key={index} variants={fadeInUp} className="group">
+                <motion.a
+                  href={company.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block p-6 rounded-2xl bg-gradient-to-br from-blue-600/10 to-purple-600/10 border border-white/10 hover:border-blue-500/30 transition-all duration-300 hover:bg-white/5"
+                  whileHover={{ y: -5, scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}>
+                  <div className="flex flex-col items-center text-center space-y-4">
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <Building className="w-8 h-8 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-blue-400 group-hover:text-blue-300 transition-colors mb-2">
+                        {company.name}
+                      </h3>
+                      <p className="text-sm text-gray-400 flex items-center justify-center gap-1">
+                        <ExternalLink className="w-3 h-3" />
+                        {language === "en" ? "Visit Website" : "زيارة الموقع"}
+                      </p>
+                    </div>
+                  </div>
+                </motion.a>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="text-center mt-16">
+            <p className="text-lg text-gray-300 mb-6">
+              {language === "en"
+                ? "Ready to explore investment opportunities with these leading developers?"
+                : "مستعد تستكشف الفرص الاستثمارية مع هذه الشركات الرائدة؟"}
+            </p>
+            <motion.a
+              href="#contact"
+              className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-4 rounded-full text-lg font-semibold text-white hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}>
+              <span>
+                {language === "en" ? "Get Investment Consultation" : "احصل على استشارة استثمارية"}
+              </span>
+              <Phone className="w-5 h-5" />
+            </motion.a>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="py-8 bg-gray-900 border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
