@@ -12,7 +12,9 @@ import {
   Mail,
   Phone,
   MessageSquare,
+  Trash2,
 } from "lucide-react";
+import ConfirmModal from "../../components/ConfirmModal";
 
 interface Contact {
   id: number;
@@ -33,6 +35,16 @@ export default function AdminPage() {
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredContacts, setFilteredContacts] = useState<Contact[]>([]);
+  const [deleteLoading, setDeleteLoading] = useState<number | null>(null);
+  const [confirmModal, setConfirmModal] = useState<{
+    isOpen: boolean;
+    contactId: number | null;
+    contactName: string;
+  }>({
+    isOpen: false,
+    contactId: null,
+    contactName: "",
+  });
 
   useEffect(() => {
     if (searchTerm) {
@@ -69,6 +81,8 @@ export default function AdminPage() {
       if (response.ok) {
         setIsAuthenticated(true);
         setContacts(data.contacts);
+        // Store password for delete operations
+        localStorage.setItem("adminPassword", password);
         setPassword("");
       } else {
         setError(data.error || "Authentication failed");
@@ -78,6 +92,58 @@ export default function AdminPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const deleteContact = async (contactId: number) => {
+    setDeleteLoading(contactId);
+    setError("");
+
+    try {
+      const adminPassword = localStorage.getItem("adminPassword");
+      const response = await fetch("/api/admin/contacts/delete", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          password: adminPassword,
+          contactId,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Remove the contact from the local state
+        setContacts((prev) => prev.filter((contact) => contact.id !== contactId));
+        setError("");
+        setConfirmModal({ isOpen: false, contactId: null, contactName: "" });
+      } else {
+        setError(data.error || "Failed to delete contact");
+      }
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setDeleteLoading(null);
+    }
+  };
+
+  const handleDeleteClick = (contact: Contact) => {
+    setConfirmModal({
+      isOpen: true,
+      contactId: contact.id,
+      contactName: `${contact.firstName} ${contact.lastName}`,
+    });
+  };
+
+  const handleConfirmDelete = () => {
+    if (confirmModal.contactId) {
+      deleteContact(confirmModal.contactId);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setConfirmModal({ isOpen: false, contactId: null, contactName: "" });
   };
 
   const exportToCSV = () => {
@@ -218,6 +284,15 @@ export default function AdminPage() {
           </div>
         </motion.div>
 
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
+            <p className="text-red-400 text-sm">{error}</p>
+          </motion.div>
+        )}
+
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -258,12 +333,15 @@ export default function AdminPage() {
                       Date
                     </div>
                   </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/10">
                 {filteredContacts.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="px-6 py-12 text-center text-gray-400">
+                    <td colSpan={7} className="px-6 py-12 text-center text-gray-400">
                       {searchTerm
                         ? "No contacts found matching your search."
                         : "No contact submissions yet."}
@@ -311,6 +389,19 @@ export default function AdminPage() {
                       <td className="px-6 py-4 text-sm text-gray-400">
                         {formatDate(contact.createdAt)}
                       </td>
+                      <td className="px-6 py-4">
+                        <button
+                          onClick={() => handleDeleteClick(contact)}
+                          disabled={deleteLoading === contact.id}
+                          className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                          title="Delete contact">
+                          {deleteLoading === contact.id ? (
+                            <div className="w-4 h-4 border-2 border-red-400 border-t-transparent rounded-full animate-spin" />
+                          ) : (
+                            <Trash2 className="w-4 h-4" />
+                          )}
+                        </button>
+                      </td>
                     </motion.tr>
                   ))
                 )}
@@ -329,11 +420,25 @@ export default function AdminPage() {
               setIsAuthenticated(false);
               setContacts([]);
               setSearchTerm("");
+              localStorage.removeItem("adminPassword");
             }}
             className="text-gray-400 hover:text-white transition-colors underline">
             Logout
           </button>
         </motion.div>
+
+        {/* Custom Confirm Modal */}
+        <ConfirmModal
+          isOpen={confirmModal.isOpen}
+          onClose={handleCancelDelete}
+          onConfirm={handleConfirmDelete}
+          title="Delete Contact"
+          message={`Are you sure you want to delete the contact from ${confirmModal.contactName}? This action cannot be undone.`}
+          confirmText="Delete"
+          cancelText="Cancel"
+          isLoading={deleteLoading !== null}
+          type="danger"
+        />
       </div>
     </div>
   );

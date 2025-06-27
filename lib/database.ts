@@ -4,7 +4,7 @@ import fs from "fs";
 interface Database {
   exec: (sql: string) => void;
   prepare: (sql: string) => {
-    run: (...params: unknown[]) => { lastInsertRowid: number };
+    run: (...params: unknown[]) => { lastInsertRowid: number; changes: number };
     all: (...params: unknown[]) => unknown[];
   };
   close: () => void;
@@ -80,6 +80,13 @@ export function getAllContacts(): Contact[] {
   const database = initDatabase();
   const stmt = database.prepare("SELECT * FROM contacts ORDER BY createdAt DESC");
   return stmt.all() as Contact[];
+}
+
+export function deleteContact(id: number): boolean {
+  const database = initDatabase();
+  const stmt = database.prepare("DELETE FROM contacts WHERE id = ?");
+  const result = stmt.run(id);
+  return result.changes > 0;
 }
 
 export function closeDatabase(): void {
