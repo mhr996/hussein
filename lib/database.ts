@@ -1,9 +1,18 @@
 import path from "path";
 import fs from "fs";
 
-let db: any = null;
+interface Database {
+  exec: (sql: string) => void;
+  prepare: (sql: string) => {
+    run: (...params: unknown[]) => { lastInsertRowid: number };
+    all: (...params: unknown[]) => unknown[];
+  };
+  close: () => void;
+}
 
-function initDatabase() {
+let db: Database | null = null;
+
+function initDatabase(): Database {
   if (!db) {
     const dbPath = path.join(process.cwd(), "data", "contacts.db");
 
@@ -16,7 +25,7 @@ function initDatabase() {
     // Use dynamic require to avoid build issues
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const Database = require("better-sqlite3");
-    db = new Database(dbPath);
+    db = new Database(dbPath) as Database;
 
     // Create the contacts table if it doesn't exist
     db.exec(`
