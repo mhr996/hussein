@@ -99,6 +99,10 @@ const translations = {
         phone: "Phone Number",
         message: "Tell me about your real estate needs...",
         submit: "Send Message",
+        sending: "Sending...",
+        successMessage: "Thank you! Your message has been sent successfully.",
+        errorMessage: "Something went wrong. Please try again.",
+        networkError: "Network error. Please check your connection and try again.",
       },
       info: {
         phone: "Phone",
@@ -207,6 +211,10 @@ const translations = {
         phone: "رقم الهاتف",
         message: "أخبرني عن احتياجاتك العقارية...",
         submit: "إرسال الرسالة",
+        sending: "جاري الإرسال...",
+        successMessage: "شكراً لك! تم إرسال رسالتك بنجاح.",
+        errorMessage: "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+        networkError: "خطأ في الشبكة. يرجى التحقق من اتصالك والمحاولة مرة أخرى.",
       },
       info: {
         phone: "الهاتف",

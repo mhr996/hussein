@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "../hooks/useTranslation";
+import ContactForm from "../components/ContactForm";
 import {
   Phone,
   Mail,
@@ -950,43 +951,7 @@ export default function HomePage() {
               variants={fadeInUp}
               className="lg:col-span-2 p-8 rounded-2xl bg-white/5 border border-white/10">
               <h3 className="text-2xl font-semibold mb-6">{t("contact.form.title")}</h3>
-              <form className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <input
-                    type="text"
-                    placeholder={t("contact.form.firstName")}
-                    className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 focus:border-blue-500 focus:outline-none transition-colors"
-                  />
-                  <input
-                    type="text"
-                    placeholder={t("contact.form.lastName")}
-                    className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 focus:border-blue-500 focus:outline-none transition-colors"
-                  />
-                </div>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <input
-                    type="email"
-                    placeholder={t("contact.form.email")}
-                    className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 focus:border-blue-500 focus:outline-none transition-colors"
-                  />
-                  <input
-                    type="tel"
-                    placeholder={t("contact.form.phone")}
-                    className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 focus:border-blue-500 focus:outline-none transition-colors"
-                  />
-                </div>
-                <textarea
-                  rows={4}
-                  placeholder={t("contact.form.message")}
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 focus:border-blue-500 focus:outline-none transition-colors resize-none"></textarea>
-                <motion.button
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-4 rounded-lg text-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}>
-                  {t("contact.form.submit")}
-                </motion.button>
-              </form>
+              <ContactForm />
             </motion.div>
 
             <motion.div variants={fadeInUp} className="space-y-6">
