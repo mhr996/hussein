@@ -28,7 +28,6 @@ function initDatabase(): Database {
 
       // Use dynamic require to avoid build issues
       console.log("[DB_INIT] Loading better-sqlite3...");
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const Database = require("better-sqlite3");
       console.log("[DB_INIT] Creating database instance...");
       db = new Database(dbPath) as Database;

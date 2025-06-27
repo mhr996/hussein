@@ -13,7 +13,6 @@ export async function GET(request: NextRequest) {
     let sqliteAvailable = false;
     let sqliteError = null;
     try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
       require("better-sqlite3");
       sqliteAvailable = true;
     } catch (error) {
