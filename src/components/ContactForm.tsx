@@ -44,6 +44,14 @@ export default function ContactForm() {
     setStatus({ type: null, message: "" });
 
     try {
+      console.log("[CONTACT_FORM] Starting form submission...", {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        hasPhone: !!formData.phone,
+        hasMessage: !!formData.message,
+      });
+
       const response = await fetch("/api/contacts", {
         method: "POST",
         headers: {
@@ -52,9 +60,17 @@ export default function ContactForm() {
         body: JSON.stringify(formData),
       });
 
+      console.log("[CONTACT_FORM] Response received:", {
+        status: response.status,
+        statusText: response.statusText,
+        ok: response.ok,
+      });
+
       const data = await response.json();
+      console.log("[CONTACT_FORM] Response data:", data);
 
       if (response.ok) {
+        console.log("[CONTACT_FORM] Submission successful");
         setStatus({
           type: "success",
           message:
@@ -70,6 +86,7 @@ export default function ContactForm() {
           message: "",
         });
       } else {
+        console.log("[CONTACT_FORM] Submission failed with error:", data.error);
         setStatus({
           type: "error",
           message:
@@ -78,7 +95,8 @@ export default function ContactForm() {
             "Something went wrong. Please try again.",
         });
       }
-    } catch {
+    } catch (error) {
+      console.error("[CONTACT_FORM] Network error:", error);
       setStatus({
         type: "error",
         message:
