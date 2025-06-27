@@ -1,5 +1,10 @@
 import path from "path";
 import fs from "fs";
+import {
+  insertContact as insertContactFallback,
+  getAllContacts as getAllContactsFallback,
+  deleteContact as deleteContactFallback,
+} from "./database-fallback";
 
 interface Database {
   exec: (sql: string) => void;
@@ -11,9 +16,10 @@ interface Database {
 }
 
 let db: Database | null = null;
+let useFallback = false;
 
 function initDatabase(): Database {
-  if (!db) {
+  if (!db && !useFallback) {
     try {
       console.log("[DB_INIT] Starting database initialization...");
       const dbPath = path.join(process.cwd(), "data", "contacts.db");
@@ -48,6 +54,15 @@ function initDatabase(): Database {
       console.log("[DB_INIT] Database initialization completed successfully");
     } catch (error) {
       console.error("[DB_INIT] Database initialization failed:", error);
+
+      // Check if it's a readonly database error
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      if (errorMessage.includes("readonly database") || errorMessage.includes("SQLITE_READONLY")) {
+        console.log("[DB_INIT] Readonly database detected, switching to fallback storage");
+        useFallback = true;
+        return {} as Database; // Return dummy database object
+      }
+
       throw new Error(
         `Database initialization failed: ${
           error instanceof Error ? error.message : "Unknown error"
@@ -56,7 +71,7 @@ function initDatabase(): Database {
     }
   }
 
-  return db;
+  return db || ({} as Database);
 }
 
 export interface Contact {
@@ -76,6 +91,12 @@ export function insertContact(contact: Omit<Contact, "id" | "createdAt">): Conta
       lastName: contact.lastName,
       email: contact.email,
     });
+
+    // Check if we should use fallback storage
+    if (useFallback) {
+      console.log("[INSERT_CONTACT] Using fallback storage");
+      return insertContactFallback(contact);
+    }
 
     const database = initDatabase();
     console.log("[INSERT_CONTACT] Database initialized successfully");
@@ -105,6 +126,15 @@ export function insertContact(contact: Omit<Contact, "id" | "createdAt">): Conta
     return newContact;
   } catch (error) {
     console.error("[INSERT_CONTACT] Contact insertion failed:", error);
+
+    // If we get a readonly database error, switch to fallback
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    if (errorMessage.includes("readonly database") || errorMessage.includes("SQLITE_READONLY")) {
+      console.log("[INSERT_CONTACT] Switching to fallback due to readonly database");
+      useFallback = true;
+      return insertContactFallback(contact);
+    }
+
     throw new Error(
       `Failed to insert contact: ${error instanceof Error ? error.message : "Unknown error"}`
     );
@@ -114,6 +144,13 @@ export function insertContact(contact: Omit<Contact, "id" | "createdAt">): Conta
 export function getAllContacts(): Contact[] {
   try {
     console.log("[GET_ALL_CONTACTS] Starting contacts retrieval...");
+
+    // Check if we should use fallback storage
+    if (useFallback) {
+      console.log("[GET_ALL_CONTACTS] Using fallback storage");
+      return getAllContactsFallback();
+    }
+
     const database = initDatabase();
     console.log("[GET_ALL_CONTACTS] Database initialized successfully");
 
@@ -126,6 +163,15 @@ export function getAllContacts(): Contact[] {
     return contacts;
   } catch (error) {
     console.error("[GET_ALL_CONTACTS] Failed to retrieve contacts:", error);
+
+    // If we get a readonly database error, switch to fallback
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    if (errorMessage.includes("readonly database") || errorMessage.includes("SQLITE_READONLY")) {
+      console.log("[GET_ALL_CONTACTS] Switching to fallback due to readonly database");
+      useFallback = true;
+      return getAllContactsFallback();
+    }
+
     throw new Error(
       `Failed to retrieve contacts: ${error instanceof Error ? error.message : "Unknown error"}`
     );
@@ -135,6 +181,13 @@ export function getAllContacts(): Contact[] {
 export function deleteContact(id: number): boolean {
   try {
     console.log("[DELETE_CONTACT] Starting contact deletion, ID:", id);
+
+    // Check if we should use fallback storage
+    if (useFallback) {
+      console.log("[DELETE_CONTACT] Using fallback storage");
+      return deleteContactFallback(id);
+    }
+
     const database = initDatabase();
     console.log("[DELETE_CONTACT] Database initialized successfully");
 
@@ -150,6 +203,15 @@ export function deleteContact(id: number): boolean {
     return success;
   } catch (error) {
     console.error("[DELETE_CONTACT] Failed to delete contact:", error);
+
+    // If we get a readonly database error, switch to fallback
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    if (errorMessage.includes("readonly database") || errorMessage.includes("SQLITE_READONLY")) {
+      console.log("[DELETE_CONTACT] Switching to fallback due to readonly database");
+      useFallback = true;
+      return deleteContactFallback(id);
+    }
+
     throw new Error(
       `Failed to delete contact: ${error instanceof Error ? error.message : "Unknown error"}`
     );
