@@ -18,7 +18,7 @@ export function getDatabase(): Database {
     db = new Database(dbPath);
 
     // Create the contacts table if it doesn't exist
-    db.exec(`
+    db?.exec(`
       CREATE TABLE IF NOT EXISTS contacts (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         firstName TEXT NOT NULL,
@@ -29,6 +29,10 @@ export function getDatabase(): Database {
         createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
       )
     `);
+  }
+
+  if (!db) {
+    throw new Error("Failed to initialize database");
   }
 
   return db;
