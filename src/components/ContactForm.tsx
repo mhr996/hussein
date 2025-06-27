@@ -78,7 +78,7 @@ export default function ContactForm() {
             "Something went wrong. Please try again.",
         });
       }
-    } catch (error) {
+    } catch {
       setStatus({
         type: "error",
         message:

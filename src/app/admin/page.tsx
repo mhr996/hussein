@@ -73,7 +73,7 @@ export default function AdminPage() {
       } else {
         setError(data.error || "Authentication failed");
       }
-    } catch (error) {
+    } catch {
       setError("Network error. Please try again.");
     } finally {
       setLoading(false);

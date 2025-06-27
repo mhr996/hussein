@@ -1,24 +1,25 @@
-import { Database } from "better-sqlite3";
 import path from "path";
+import fs from "fs";
 
-let db: Database | null = null;
+let db: any = null;
 
-export function getDatabase(): Database {
+function initDatabase() {
   if (!db) {
     const dbPath = path.join(process.cwd(), "data", "contacts.db");
 
     // Create the data directory if it doesn't exist
-    const fs = require("fs");
     const dataDir = path.dirname(dbPath);
     if (!fs.existsSync(dataDir)) {
       fs.mkdirSync(dataDir, { recursive: true });
     }
 
+    // Use dynamic require to avoid build issues
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const Database = require("better-sqlite3");
     db = new Database(dbPath);
 
     // Create the contacts table if it doesn't exist
-    db?.exec(`
+    db.exec(`
       CREATE TABLE IF NOT EXISTS contacts (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         firstName TEXT NOT NULL,
@@ -29,10 +30,6 @@ export function getDatabase(): Database {
         createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
       )
     `);
-  }
-
-  if (!db) {
-    throw new Error("Failed to initialize database");
   }
 
   return db;
@@ -49,8 +46,8 @@ export interface Contact {
 }
 
 export function insertContact(contact: Omit<Contact, "id" | "createdAt">): Contact {
-  const db = getDatabase();
-  const stmt = db.prepare(`
+  const database = initDatabase();
+  const stmt = database.prepare(`
     INSERT INTO contacts (firstName, lastName, email, phone, message)
     VALUES (?, ?, ?, ?, ?)
   `);
@@ -71,8 +68,8 @@ export function insertContact(contact: Omit<Contact, "id" | "createdAt">): Conta
 }
 
 export function getAllContacts(): Contact[] {
-  const db = getDatabase();
-  const stmt = db.prepare("SELECT * FROM contacts ORDER BY createdAt DESC");
+  const database = initDatabase();
+  const stmt = database.prepare("SELECT * FROM contacts ORDER BY createdAt DESC");
   return stmt.all() as Contact[];
 }
 
