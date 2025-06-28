@@ -17,7 +17,7 @@ interface Database {
 
 let db: Database | null = null;
 let useFallback = false;
- 
+
 function initDatabase(): Database {
   if (!db && !useFallback) {
     try {
