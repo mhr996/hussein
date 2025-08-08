@@ -121,7 +121,7 @@ export const content = {
         location: "إعلامية",
         content:
           "يسعد أوقاتك استاذ حسين، حابة اتشكرك على تعاملك اللطيف معي والإيضاحات يلي وضحتها لكل استفساراتي حتى لدرجة خلال 24 ساعة فقط قررت سجل على عقار عن طريقك. واليوم أنا كإعلامية بقدر اكتشف الأشخاص المهنيين والصادقين وانت حقيقة منهم.",
-        image: "/testimonials/customer-limona.jpg",
+        image: "/testimonials/customer-limona.JPG",
         rating: 5,
       },
       {
