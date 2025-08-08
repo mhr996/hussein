@@ -1395,7 +1395,7 @@ export default function HomePage() {
                   {
                     icon: Mail,
                     title: content.contact.info.email,
-                    value: "hussein@houshrealestate.com",
+                    value: "info@houshrealestate.com",
                     gradient: "from-blue-500 to-blue-600",
                     bgGradient: "from-blue-500/20 to-blue-600/20",
                     borderColor: "border-blue-400/30",
@@ -1403,7 +1403,7 @@ export default function HomePage() {
                   {
                     icon: Instagram,
                     title: content.contact.info.instagram,
-                    value: "@husseinhoush",
+                    value: "@hussein_housh",
                     gradient: "from-purple-500 to-pink-600",
                     bgGradient: "from-purple-500/20 to-pink-600/20",
                     borderColor: "border-purple-400/30",
@@ -1444,7 +1444,7 @@ export default function HomePage() {
                           <h4 className="text-base md:text-lg font-bold text-white mb-1 group-hover:text-gray-100 transition-colors">
                             {item.title}
                           </h4>
-                          <p className="text-sm md:text-base text-gray-300 font-medium group-hover:text-gray-200 transition-colors">
+                          <p style={{ direction: "ltr" }} className="text-sm md:text-base text-gray-300 font-medium group-hover:text-gray-200 transition-colors">
                             {item.value}
                           </p>
                         </div>
