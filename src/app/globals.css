@@ -53,7 +53,7 @@ body.arabic .text-left {
 }
 
 body.arabic .text-right {
-  text-align: left;
+  text-align: right;
 }
 
 /* Custom scrollbar */

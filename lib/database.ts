@@ -1,77 +1,39 @@
-import path from "path";
-import fs from "fs";
+import { createClient } from "@supabase/supabase-js";
 import {
   insertContact as insertContactFallback,
   getAllContacts as getAllContactsFallback,
   deleteContact as deleteContactFallback,
 } from "./database-fallback";
 
-interface Database {
-  exec: (sql: string) => void;
-  prepare: (sql: string) => {
-    run: (...params: unknown[]) => { lastInsertRowid: number; changes: number };
-    all: (...params: unknown[]) => unknown[];
-  };
-  close: () => void;
-}
-
-let db: Database | null = null;
+// Initialize Supabase client
+let supabase: ReturnType<typeof createClient> | null = null;
 let useFallback = false;
 
-function initDatabase(): Database {
-  if (!db && !useFallback) {
+function getSupabaseClient() {
+  if (!supabase && !useFallback) {
     try {
-      console.log("[DB_INIT] Starting database initialization...");
-      const dbPath = path.join(process.cwd(), "data", "contacts.db");
-      console.log("[DB_INIT] Database path:", dbPath);
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-      // Create the data directory if it doesn't exist
-      const dataDir = path.dirname(dbPath);
-      if (!fs.existsSync(dataDir)) {
-        console.log("[DB_INIT] Creating data directory:", dataDir);
-        fs.mkdirSync(dataDir, { recursive: true });
-      }
-
-      // Use dynamic require to avoid build issues
-      console.log("[DB_INIT] Loading better-sqlite3...");
-      const Database = require("better-sqlite3");
-      console.log("[DB_INIT] Creating database instance...");
-      db = new Database(dbPath) as Database;
-
-      // Create the contacts table if it doesn't exist
-      console.log("[DB_INIT] Creating contacts table...");
-      db.exec(`
-        CREATE TABLE IF NOT EXISTS contacts (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          firstName TEXT NOT NULL,
-          lastName TEXT NOT NULL,
-          email TEXT NOT NULL,
-          phone TEXT NOT NULL,
-          message TEXT NOT NULL,
-          createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-      `);
-      console.log("[DB_INIT] Database initialization completed successfully");
-    } catch (error) {
-      console.error("[DB_INIT] Database initialization failed:", error);
-
-      // Check if it's a readonly database error
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      if (errorMessage.includes("readonly database") || errorMessage.includes("SQLITE_READONLY")) {
-        console.log("[DB_INIT] Readonly database detected, switching to fallback storage");
+      if (!supabaseUrl || !supabaseKey) {
+        console.log(
+          "[SUPABASE_INIT] Environment variables not found, switching to fallback storage"
+        );
         useFallback = true;
-        return {} as Database; // Return dummy database object
+        return null;
       }
 
-      throw new Error(
-        `Database initialization failed: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`
-      );
+      console.log("[SUPABASE_INIT] Initializing Supabase client...");
+      supabase = createClient(supabaseUrl, supabaseKey);
+      console.log("[SUPABASE_INIT] Supabase client initialized successfully");
+    } catch (error) {
+      console.error("[SUPABASE_INIT] Supabase initialization failed:", error);
+      useFallback = true;
+      return null;
     }
   }
 
-  return db || ({} as Database);
+  return supabase;
 }
 
 export interface Contact {
@@ -84,143 +46,228 @@ export interface Contact {
   createdAt: string;
 }
 
-export function insertContact(contact: Omit<Contact, "id" | "createdAt">): Contact {
-  try {
-    console.log("[INSERT_CONTACT] Starting contact insertion:", {
-      firstName: contact.firstName,
-      lastName: contact.lastName,
-      email: contact.email,
-    });
+export function insertContact(
+  contact: Omit<Contact, "id" | "createdAt">
+): Promise<Contact> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      console.log("[INSERT_CONTACT] Starting contact insertion:", {
+        firstName: contact.firstName,
+        lastName: contact.lastName,
+        email: contact.email,
+      });
 
-    // Check if we should use fallback storage
-    if (useFallback) {
-      console.log("[INSERT_CONTACT] Using fallback storage");
-      return insertContactFallback(contact);
-    }
+      // Check if we should use fallback storage
+      if (useFallback) {
+        console.log("[INSERT_CONTACT] Using fallback storage");
+        resolve(insertContactFallback(contact));
+        return;
+      }
 
-    const database = initDatabase();
-    console.log("[INSERT_CONTACT] Database initialized successfully");
+      const client = getSupabaseClient();
+      if (!client) {
+        console.log("[INSERT_CONTACT] No Supabase client, using fallback");
+        resolve(insertContactFallback(contact));
+        return;
+      }
 
-    const stmt = database.prepare(`
-      INSERT INTO contacts (firstName, lastName, email, phone, message)
-      VALUES (?, ?, ?, ?, ?)
-    `);
-    console.log("[INSERT_CONTACT] Prepared statement created");
+      console.log("[INSERT_CONTACT] Using Supabase for contact insertion");
 
-    const result = stmt.run(
-      contact.firstName,
-      contact.lastName,
-      contact.email,
-      contact.phone,
-      contact.message
-    );
-    console.log("[INSERT_CONTACT] Insert executed successfully, ID:", result.lastInsertRowid);
+      const { data, error } = await client
+        .from("contacts")
+        .insert([
+          {
+            first_name: contact.firstName,
+            last_name: contact.lastName,
+            email: contact.email,
+            phone: contact.phone,
+            message: contact.message,
+          },
+        ])
+        .select()
+        .single();
 
-    const newContact = {
-      id: result.lastInsertRowid as number,
-      ...contact,
-      createdAt: new Date().toISOString(),
-    };
+      if (error) {
+        console.error("[INSERT_CONTACT] Supabase error:", error);
 
-    console.log("[INSERT_CONTACT] Contact insertion completed successfully");
-    return newContact;
-  } catch (error) {
-    console.error("[INSERT_CONTACT] Contact insertion failed:", error);
+        // Fall back to local storage on Supabase error
+        console.log(
+          "[INSERT_CONTACT] Falling back to local storage due to Supabase error"
+        );
+        useFallback = true;
+        resolve(insertContactFallback(contact));
+        return;
+      }
 
-    // If we get a readonly database error, switch to fallback
-    const errorMessage = error instanceof Error ? error.message : String(error);
-    if (errorMessage.includes("readonly database") || errorMessage.includes("SQLITE_READONLY")) {
-      console.log("[INSERT_CONTACT] Switching to fallback due to readonly database");
+      const newContact: Contact = {
+        id: data.id as number,
+        firstName: data.first_name as string,
+        lastName: data.last_name as string,
+        email: data.email as string,
+        phone: data.phone as string,
+        message: data.message as string,
+        createdAt: data.created_at as string,
+      };
+
+      console.log("[INSERT_CONTACT] Contact insertion completed successfully");
+      resolve(newContact);
+    } catch (error) {
+      console.error("[INSERT_CONTACT] Contact insertion failed:", error);
+
+      // Fall back to local storage on any error
+      console.log(
+        "[INSERT_CONTACT] Falling back to local storage due to error"
+      );
       useFallback = true;
-      return insertContactFallback(contact);
+      try {
+        resolve(insertContactFallback(contact));
+      } catch (fallbackError) {
+        reject(
+          new Error(
+            `Both Supabase and fallback failed: ${error}, ${fallbackError}`
+          )
+        );
+      }
     }
-
-    throw new Error(
-      `Failed to insert contact: ${error instanceof Error ? error.message : "Unknown error"}`
-    );
-  }
+  });
 }
 
-export function getAllContacts(): Contact[] {
-  try {
-    console.log("[GET_ALL_CONTACTS] Starting contacts retrieval...");
+export function getAllContacts(): Promise<Contact[]> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      console.log("[GET_ALL_CONTACTS] Starting contacts retrieval...");
 
-    // Check if we should use fallback storage
-    if (useFallback) {
-      console.log("[GET_ALL_CONTACTS] Using fallback storage");
-      return getAllContactsFallback();
-    }
+      // Check if we should use fallback storage
+      if (useFallback) {
+        console.log("[GET_ALL_CONTACTS] Using fallback storage");
+        resolve(getAllContactsFallback());
+        return;
+      }
 
-    const database = initDatabase();
-    console.log("[GET_ALL_CONTACTS] Database initialized successfully");
+      const client = getSupabaseClient();
+      if (!client) {
+        console.log("[GET_ALL_CONTACTS] No Supabase client, using fallback");
+        resolve(getAllContactsFallback());
+        return;
+      }
 
-    const stmt = database.prepare("SELECT * FROM contacts ORDER BY createdAt DESC");
-    console.log("[GET_ALL_CONTACTS] Prepared statement created");
+      console.log("[GET_ALL_CONTACTS] Using Supabase for contacts retrieval");
 
-    const contacts = stmt.all() as Contact[];
-    console.log("[GET_ALL_CONTACTS] Retrieved contacts count:", contacts.length);
+      const { data, error } = await client
+        .from("contacts")
+        .select("*")
+        .order("created_at", { ascending: false });
 
-    return contacts;
-  } catch (error) {
-    console.error("[GET_ALL_CONTACTS] Failed to retrieve contacts:", error);
+      if (error) {
+        console.error("[GET_ALL_CONTACTS] Supabase error:", error);
 
-    // If we get a readonly database error, switch to fallback
-    const errorMessage = error instanceof Error ? error.message : String(error);
-    if (errorMessage.includes("readonly database") || errorMessage.includes("SQLITE_READONLY")) {
-      console.log("[GET_ALL_CONTACTS] Switching to fallback due to readonly database");
+        // Fall back to local storage on Supabase error
+        console.log(
+          "[GET_ALL_CONTACTS] Falling back to local storage due to Supabase error"
+        );
+        useFallback = true;
+        resolve(getAllContactsFallback());
+        return;
+      }
+
+      const contacts: Contact[] = (data || []).map((row: any) => ({
+        id: row.id as number,
+        firstName: row.first_name as string,
+        lastName: row.last_name as string,
+        email: row.email as string,
+        phone: row.phone as string,
+        message: row.message as string,
+        createdAt: row.created_at as string,
+      }));
+
+      console.log(
+        "[GET_ALL_CONTACTS] Retrieved contacts count:",
+        contacts.length
+      );
+      resolve(contacts);
+    } catch (error) {
+      console.error("[GET_ALL_CONTACTS] Failed to retrieve contacts:", error);
+
+      // Fall back to local storage on any error
+      console.log(
+        "[GET_ALL_CONTACTS] Falling back to local storage due to error"
+      );
       useFallback = true;
-      return getAllContactsFallback();
+      try {
+        resolve(getAllContactsFallback());
+      } catch (fallbackError) {
+        reject(
+          new Error(
+            `Both Supabase and fallback failed: ${error}, ${fallbackError}`
+          )
+        );
+      }
     }
-
-    throw new Error(
-      `Failed to retrieve contacts: ${error instanceof Error ? error.message : "Unknown error"}`
-    );
-  }
+  });
 }
 
-export function deleteContact(id: number): boolean {
-  try {
-    console.log("[DELETE_CONTACT] Starting contact deletion, ID:", id);
+export function deleteContact(id: number): Promise<boolean> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      console.log("[DELETE_CONTACT] Starting contact deletion, ID:", id);
 
-    // Check if we should use fallback storage
-    if (useFallback) {
-      console.log("[DELETE_CONTACT] Using fallback storage");
-      return deleteContactFallback(id);
-    }
+      // Check if we should use fallback storage
+      if (useFallback) {
+        console.log("[DELETE_CONTACT] Using fallback storage");
+        resolve(deleteContactFallback(id));
+        return;
+      }
 
-    const database = initDatabase();
-    console.log("[DELETE_CONTACT] Database initialized successfully");
+      const client = getSupabaseClient();
+      if (!client) {
+        console.log("[DELETE_CONTACT] No Supabase client, using fallback");
+        resolve(deleteContactFallback(id));
+        return;
+      }
 
-    const stmt = database.prepare("DELETE FROM contacts WHERE id = ?");
-    console.log("[DELETE_CONTACT] Prepared statement created");
+      console.log("[DELETE_CONTACT] Using Supabase for contact deletion");
 
-    const result = stmt.run(id);
-    console.log("[DELETE_CONTACT] Delete executed, changes:", result.changes);
+      const { error } = await client.from("contacts").delete().eq("id", id);
 
-    const success = result.changes > 0;
-    console.log("[DELETE_CONTACT] Deletion result:", success);
+      if (error) {
+        console.error("[DELETE_CONTACT] Supabase error:", error);
 
-    return success;
-  } catch (error) {
-    console.error("[DELETE_CONTACT] Failed to delete contact:", error);
+        // Fall back to local storage on Supabase error
+        console.log(
+          "[DELETE_CONTACT] Falling back to local storage due to Supabase error"
+        );
+        useFallback = true;
+        resolve(deleteContactFallback(id));
+        return;
+      }
 
-    // If we get a readonly database error, switch to fallback
-    const errorMessage = error instanceof Error ? error.message : String(error);
-    if (errorMessage.includes("readonly database") || errorMessage.includes("SQLITE_READONLY")) {
-      console.log("[DELETE_CONTACT] Switching to fallback due to readonly database");
+      console.log("[DELETE_CONTACT] Contact deleted successfully");
+      resolve(true);
+    } catch (error) {
+      console.error("[DELETE_CONTACT] Failed to delete contact:", error);
+
+      // Fall back to local storage on any error
+      console.log(
+        "[DELETE_CONTACT] Falling back to local storage due to error"
+      );
       useFallback = true;
-      return deleteContactFallback(id);
+      try {
+        resolve(deleteContactFallback(id));
+      } catch (fallbackError) {
+        reject(
+          new Error(
+            `Both Supabase and fallback failed: ${error}, ${fallbackError}`
+          )
+        );
+      }
     }
-
-    throw new Error(
-      `Failed to delete contact: ${error instanceof Error ? error.message : "Unknown error"}`
-    );
-  }
+  });
 }
 
 export function closeDatabase(): void {
-  if (db) {
-    db.close();
-    db = null;
-  }
+  // No need to close Supabase connection
+  console.log(
+    "[SUPABASE_CLOSE] Database connection closed (no-op for Supabase)"
+  );
+  supabase = null;
 }

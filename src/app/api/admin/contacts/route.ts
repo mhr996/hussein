@@ -20,10 +20,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid password" }, { status: 401 });
     }
 
-    console.log("[API_ADMIN_CONTACTS] Password validated, fetching contacts...");
+    console.log(
+      "[API_ADMIN_CONTACTS] Password validated, fetching contacts..."
+    );
     // Get all contacts from database
-    const contacts = getAllContacts();
-    console.log("[API_ADMIN_CONTACTS] Contacts fetched successfully, count:", contacts.length);
+    const contacts = await getAllContacts();
+    console.log(
+      "[API_ADMIN_CONTACTS] Contacts fetched successfully, count:",
+      contacts.length
+    );
 
     return NextResponse.json({
       success: true,

@@ -1,17 +1,24 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { MobileMenuProvider } from "../components/MobileMenuProvider";
 
 export const metadata: Metadata = {
-  title: "Hussein Housh - Premier Real Estate Agent in Dubai",
+  title: "حسين حوش - وكيل عقارات متميز في دبي",
   description:
-    "Transform your real estate dreams into reality with Hussein Housh, Dubai's premier real estate agent. Expert guidance in luxury properties and investments.",
+    "حوّل أحلامك العقارية إلى حقيقة مع حسين حوش، وكيل العقارات المتميز في دبي. خبرة في العقارات الفاخرة والاستثمارات.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en">
-      <body>
-        <main className="pt-16">{children}</main>
+    <html lang="ar" dir="rtl">
+      <body className="arabic" suppressHydrationWarning={true}>
+        <MobileMenuProvider>
+          <main className="">{children}</main>
+        </MobileMenuProvider>
       </body>
     </html>
   );

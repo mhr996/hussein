@@ -16,19 +16,25 @@ export async function POST(request: NextRequest) {
 
     if (!firstName || !lastName || !email || !phone || !message) {
       console.log("[API_CONTACTS] Validation failed: Missing required fields");
-      return NextResponse.json({ error: "All fields are required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "All fields are required" },
+        { status: 400 }
+      );
     }
 
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       console.log("[API_CONTACTS] Validation failed: Invalid email format");
-      return NextResponse.json({ error: "Invalid email format" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid email format" },
+        { status: 400 }
+      );
     }
 
     console.log("[API_CONTACTS] Validation passed, inserting contact...");
     // Insert contact into database
-    const contact = insertContact({
+    const contact = await insertContact({
       firstName: firstName.trim(),
       lastName: lastName.trim(),
       email: email.trim().toLowerCase(),
@@ -36,7 +42,10 @@ export async function POST(request: NextRequest) {
       message: message.trim(),
     });
 
-    console.log("[API_CONTACTS] Contact inserted successfully with ID:", contact.id);
+    console.log(
+      "[API_CONTACTS] Contact inserted successfully with ID:",
+      contact.id
+    );
     return NextResponse.json({
       success: true,
       message: "Contact saved successfully",

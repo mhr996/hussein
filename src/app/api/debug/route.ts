@@ -9,14 +9,15 @@ export async function GET(request: NextRequest) {
     const hasAdminPassword = !!process.env.ADMIN_PASSWORD;
     const workingDirectory = process.cwd();
 
-    // Try to check if better-sqlite3 is available
-    let sqliteAvailable = false;
-    let sqliteError = null;
+    // Check Supabase configuration
+    let supabaseConfigured = false;
+    let supabaseError = null;
     try {
-      require("better-sqlite3");
-      sqliteAvailable = true;
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      supabaseConfigured = !!(supabaseUrl && supabaseKey);
     } catch (error) {
-      sqliteError = error instanceof Error ? error.message : "Unknown error";
+      supabaseError = error instanceof Error ? error.message : "Unknown error";
     }
 
     const debugInfo = {
@@ -27,8 +28,8 @@ export async function GET(request: NextRequest) {
       workingDirectory,
       platform: process.platform,
       nodeVersion: process.version,
-      sqliteAvailable,
-      sqliteError,
+      supabaseConfigured,
+      supabaseError,
       // Don't expose sensitive data in production
       ...(isDev && {
         environmentVariables: Object.keys(process.env).filter(

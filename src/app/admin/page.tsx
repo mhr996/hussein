@@ -15,6 +15,7 @@ import {
   Trash2,
 } from "lucide-react";
 import ConfirmModal from "../../components/ConfirmModal";
+import { adminContent } from "../../content/admin-arabic";
 
 interface Contact {
   id: number;
@@ -85,10 +86,10 @@ export default function AdminPage() {
         localStorage.setItem("adminPassword", password);
         setPassword("");
       } else {
-        setError(data.error || "Authentication failed");
+        setError(data.error || adminContent.login.authenticationFailed);
       }
     } catch {
-      setError("Network error. Please try again.");
+      setError(adminContent.login.networkError);
     } finally {
       setLoading(false);
     }
@@ -115,14 +116,16 @@ export default function AdminPage() {
 
       if (response.ok) {
         // Remove the contact from the local state
-        setContacts((prev) => prev.filter((contact) => contact.id !== contactId));
+        setContacts((prev) =>
+          prev.filter((contact) => contact.id !== contactId)
+        );
         setError("");
         setConfirmModal({ isOpen: false, contactId: null, contactName: "" });
       } else {
-        setError(data.error || "Failed to delete contact");
+        setError(data.error || adminContent.delete.deleteError);
       }
     } catch {
-      setError("Network error. Please try again.");
+      setError(adminContent.login.networkError);
     } finally {
       setDeleteLoading(null);
     }
@@ -147,7 +150,15 @@ export default function AdminPage() {
   };
 
   const exportToCSV = () => {
-    const headers = ["ID", "First Name", "Last Name", "Email", "Phone", "Message", "Date"];
+    const headers = [
+      adminContent.table.headers.id,
+      adminContent.table.headers.firstName,
+      adminContent.table.headers.lastName,
+      adminContent.table.headers.email,
+      adminContent.table.headers.phone,
+      adminContent.table.headers.message,
+      adminContent.table.headers.date,
+    ];
     const csvContent = [
       headers.join(","),
       ...filteredContacts.map((contact) =>
@@ -168,7 +179,10 @@ export default function AdminPage() {
     if (link.download !== undefined) {
       const url = URL.createObjectURL(blob);
       link.setAttribute("href", url);
-      link.setAttribute("download", `contacts_${new Date().toISOString().split("T")[0]}.csv`);
+      link.setAttribute(
+        "download",
+        `contacts_${new Date().toISOString().split("T")[0]}.csv`
+      );
       link.style.visibility = "hidden";
       document.body.appendChild(link);
       link.click();
@@ -193,12 +207,15 @@ export default function AdminPage() {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="w-full max-w-md p-8 rounded-2xl bg-gradient-to-br from-blue-600/10 to-purple-600/10 border border-white/10 backdrop-blur-sm">
+          className="w-full max-w-md p-8 rounded-2xl bg-gradient-to-br from-blue-600/10 to-purple-600/10 border border-white/10 backdrop-blur-sm"
+        >
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2">
-              Admin Access
+              {adminContent.login.title}
             </h1>
-            <p className="text-gray-400">Enter password to view contact submissions</p>
+            <p className="text-gray-400">
+              Enter password to view contact submissions
+            </p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
@@ -207,15 +224,20 @@ export default function AdminPage() {
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter admin password"
+                placeholder={adminContent.login.passwordPlaceholder}
                 className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 focus:border-blue-500 focus:outline-none transition-colors pr-12"
                 required
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors">
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+              >
+                {showPassword ? (
+                  <EyeOff className="w-5 h-5" />
+                ) : (
+                  <Eye className="w-5 h-5" />
+                )}
               </button>
             </div>
 
@@ -223,7 +245,8 @@ export default function AdminPage() {
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-red-400 text-sm text-center">
+                className="text-red-400 text-sm text-center"
+              >
                 {error}
               </motion.p>
             )}
@@ -233,8 +256,11 @@ export default function AdminPage() {
               disabled={loading}
               className="w-full bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}>
-              {loading ? "Authenticating..." : "Access Admin Panel"}
+              whileTap={{ scale: 0.98 }}
+            >
+              {loading
+                ? adminContent.login.authenticating
+                : adminContent.login.loginButton}
             </motion.button>
           </form>
         </motion.div>
@@ -249,14 +275,16 @@ export default function AdminPage() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-8">
+          className="mb-8"
+        >
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2">
-                Contact Submissions
+                {adminContent.dashboard.title}
               </h1>
               <p className="text-gray-400">
-                Total submissions: {contacts.length} | Showing: {filteredContacts.length}
+                Total submissions: {contacts.length} | Showing:{" "}
+                {filteredContacts.length}
               </p>
             </div>
 
@@ -267,7 +295,7 @@ export default function AdminPage() {
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Search contacts..."
+                  placeholder={adminContent.dashboard.search}
                   className="pl-10 pr-4 py-2 rounded-lg bg-white/10 border border-white/20 focus:border-blue-500 focus:outline-none transition-colors"
                 />
               </div>
@@ -276,9 +304,10 @@ export default function AdminPage() {
                 onClick={exportToCSV}
                 className="flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-600 px-4 py-2 rounded-lg font-semibold hover:from-green-700 hover:to-emerald-700 transition-all duration-300"
                 whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}>
+                whileTap={{ scale: 0.98 }}
+              >
                 <Download className="w-4 h-4" />
-                Export CSV
+                {adminContent.dashboard.export}
               </motion.button>
             </div>
           </div>
@@ -288,7 +317,8 @@ export default function AdminPage() {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
+            className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg"
+          >
             <p className="text-red-400 text-sm">{error}</p>
           </motion.div>
         )}
@@ -297,12 +327,15 @@ export default function AdminPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
+          className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden"
+        >
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-white/5">
                 <tr>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">ID</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">
+                    ID
+                  </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">
                     <div className="flex items-center gap-2">
                       <User className="w-4 h-4" />
@@ -341,7 +374,10 @@ export default function AdminPage() {
               <tbody className="divide-y divide-white/10">
                 {filteredContacts.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-6 py-12 text-center text-gray-400">
+                    <td
+                      colSpan={7}
+                      className="px-6 py-12 text-center text-gray-400"
+                    >
                       {searchTerm
                         ? "No contacts found matching your search."
                         : "No contact submissions yet."}
@@ -354,8 +390,11 @@ export default function AdminPage() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.05 }}
-                      className="hover:bg-white/5 transition-colors">
-                      <td className="px-6 py-4 text-sm text-gray-300">#{contact.id}</td>
+                      className="hover:bg-white/5 transition-colors"
+                    >
+                      <td className="px-6 py-4 text-sm text-gray-300">
+                        #{contact.id}
+                      </td>
                       <td className="px-6 py-4">
                         <div className="text-sm">
                           <div className="font-medium text-white">
@@ -366,14 +405,16 @@ export default function AdminPage() {
                       <td className="px-6 py-4">
                         <a
                           href={`mailto:${contact.email}`}
-                          className="text-sm text-blue-400 hover:text-blue-300 transition-colors">
+                          className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                        >
                           {contact.email}
                         </a>
                       </td>
                       <td className="px-6 py-4">
                         <a
                           href={`tel:${contact.phone}`}
-                          className="text-sm text-green-400 hover:text-green-300 transition-colors">
+                          className="text-sm text-green-400 hover:text-green-300 transition-colors"
+                        >
                           {contact.phone}
                         </a>
                       </td>
@@ -394,7 +435,8 @@ export default function AdminPage() {
                           onClick={() => handleDeleteClick(contact)}
                           disabled={deleteLoading === contact.id}
                           className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                          title="Delete contact">
+                          title="Delete contact"
+                        >
                           {deleteLoading === contact.id ? (
                             <div className="w-4 h-4 border-2 border-red-400 border-t-transparent rounded-full animate-spin" />
                           ) : (
@@ -414,7 +456,8 @@ export default function AdminPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-8 text-center">
+          className="mt-8 text-center"
+        >
           <button
             onClick={() => {
               setIsAuthenticated(false);
@@ -422,8 +465,9 @@ export default function AdminPage() {
               setSearchTerm("");
               localStorage.removeItem("adminPassword");
             }}
-            className="text-gray-400 hover:text-white transition-colors underline">
-            Logout
+            className="text-gray-400 hover:text-white transition-colors underline"
+          >
+            {adminContent.dashboard.logout}
           </button>
         </motion.div>
 
@@ -432,10 +476,10 @@ export default function AdminPage() {
           isOpen={confirmModal.isOpen}
           onClose={handleCancelDelete}
           onConfirm={handleConfirmDelete}
-          title="Delete Contact"
-          message={`Are you sure you want to delete the contact from ${confirmModal.contactName}? This action cannot be undone.`}
-          confirmText="Delete"
-          cancelText="Cancel"
+          title={adminContent.delete.confirmTitle}
+          message={`${adminContent.delete.confirmMessage} ${confirmModal.contactName}؟`}
+          confirmText={adminContent.delete.confirmButton}
+          cancelText={adminContent.delete.cancelButton}
           isLoading={deleteLoading !== null}
           type="danger"
         />

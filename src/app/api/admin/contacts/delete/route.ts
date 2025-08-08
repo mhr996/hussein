@@ -26,12 +26,17 @@ export async function DELETE(request: NextRequest) {
 
     if (!contactId || typeof contactId !== "number") {
       console.log("[API_DELETE_CONTACT] Validation failed: Invalid contact ID");
-      return NextResponse.json({ error: "Valid contact ID is required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Valid contact ID is required" },
+        { status: 400 }
+      );
     }
 
-    console.log("[API_DELETE_CONTACT] Validation passed, attempting deletion...");
+    console.log(
+      "[API_DELETE_CONTACT] Validation passed, attempting deletion..."
+    );
     // Delete contact from database
-    const deleted = deleteContact(contactId);
+    const deleted = await deleteContact(contactId);
     console.log("[API_DELETE_CONTACT] Delete operation result:", deleted);
 
     if (deleted) {
@@ -41,7 +46,9 @@ export async function DELETE(request: NextRequest) {
         message: "Contact deleted successfully",
       });
     } else {
-      console.log("[API_DELETE_CONTACT] Contact not found or could not be deleted");
+      console.log(
+        "[API_DELETE_CONTACT] Contact not found or could not be deleted"
+      );
       return NextResponse.json(
         { error: "Contact not found or could not be deleted" },
         { status: 404 }
