@@ -757,7 +757,7 @@ export default function HomePage() {
                           whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
                           transition={{ duration: 0.6 }}
                         >
-                          <IconComponent className="w-10 h-10 md:w-12 md:h-12 text-white" />
+                          <IconComponent className="w-12 h-12 md:w-12 md:h-12 text-white" />
                         </motion.div>
 
                         {/* Floating decorative elements */}
