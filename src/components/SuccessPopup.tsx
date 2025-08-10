@@ -110,7 +110,7 @@ export default function SuccessPopup({ isOpen, onClose }: SuccessPopupProps) {
 
                   {/* Right Column - Video Content */}
                   <motion.div
-                    className="order-1 lg:order-2"
+                    className="order-2"
                     initial={{ opacity: 0, x: 30 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.4 }}
