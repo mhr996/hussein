@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { MobileMenuProvider } from "../components/MobileMenuProvider";
+import { SuccessPopupProvider } from "../contexts/SuccessPopupContext";
+import SuccessPopupWrapper from "../components/SuccessPopupWrapper";
 
 export const metadata: Metadata = {
   title: "حسين حوش - وكيل عقارات متميز في دبي",
@@ -16,9 +18,12 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl">
       <body className="arabic" suppressHydrationWarning={true}>
-        <MobileMenuProvider>
-          <main className="">{children}</main>
-        </MobileMenuProvider>
+        <SuccessPopupProvider>
+          <MobileMenuProvider>
+            <main className="">{children}</main>
+            <SuccessPopupWrapper />
+          </MobileMenuProvider>
+        </SuccessPopupProvider>
       </body>
     </html>
   );

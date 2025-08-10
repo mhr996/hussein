@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { content } from "../content/arabic";
 import { CheckCircle, AlertCircle } from "lucide-react";
+import { useSuccessPopup } from "../contexts/SuccessPopupContext";
 
 interface FormData {
   firstName: string;
@@ -28,6 +29,7 @@ export default function ContactForm() {
   });
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<FormStatus>({ type: null, message: "" });
+  const { setShowSuccessPopup } = useSuccessPopup();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -84,6 +86,8 @@ export default function ContactForm() {
           phone: "",
           message: "",
         });
+        // Show success popup
+        setShowSuccessPopup(true);
       } else {
         console.log("[CONTACT_FORM] Submission failed with error:", data.error);
         setStatus({
@@ -250,13 +254,14 @@ export default function ContactForm() {
             </span>
             {!loading && (
               <motion.div
-                className="w-3 h-3 bg-white rounded-full"
+                className="w-3 h-3 hidden lg:block bg-white rounded-full not-last:"
                 animate={{ scale: [1, 1.3, 1] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
               />
             )}
           </div>
         </motion.button>
+        <p className="mt-3 text-xs text-center">معلوماتك سرية 100%</p>
       </motion.div>
     </form>
   );
