@@ -155,7 +155,7 @@ export const content = {
         content:
           "صراحة من أبدع الناس اللي عرفتهم، شغله في المجال العقاري استثنائي! حسين ما شاء الله عليه عنده معلومات وخبرات قوية، وأساليبه في تسويق المشاريع دايمًا خارج الصندوق وفعّالة بشكل رهيب ومبدع.",
 
-        image: "/testimonials/mohammed-haj.JPEG",
+        image: "/testimonials/mohammed-haj.jpeg",
         rating: 5,
       },
       {
