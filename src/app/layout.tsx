@@ -3,6 +3,7 @@ import "./globals.css";
 import { MobileMenuProvider } from "../components/MobileMenuProvider";
 import { SuccessPopupProvider } from "../contexts/SuccessPopupContext";
 import SuccessPopupWrapper from "../components/SuccessPopupWrapper";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "حسين حوش - وكيل عقارات متميز في دبي",
@@ -17,6 +18,21 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ar" dir="rtl">
+      <head>
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-3KEJ9FEYNN"
+        ></Script>
+        <Script>
+          {`
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-3KEJ9FEYNN');
+`}
+        </Script>
+      </head>
       <body className="arabic" suppressHydrationWarning={true}>
         <SuccessPopupProvider>
           <MobileMenuProvider>
