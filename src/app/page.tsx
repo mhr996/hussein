@@ -557,6 +557,43 @@ export default function HomePage() {
                 {content.hero.description}
               </motion.p>
 
+              {/* Compact Statistics */}
+              <motion.div
+                className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.5 }}
+              >
+                {[
+                  { number: "+50", label: "مستثمرين مبسوطين", icon: "👥" },
+                  { number: "+50M$", label: "صفقات ناجحة", icon: "💰" },
+                  { number: "30K+", label: "متابعين", icon: "📱" },
+                  { number: "5", label: "سنين خبرة", icon: "🏆" },
+                ].map((stat, index) => (
+                  <motion.div
+                    key={index}
+                    className="text-center bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/20 hover:bg-white/20 transition-all duration-300"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{
+                      duration: 0.5,
+                      delay: 0.6 + index * 0.1,
+                      type: "spring",
+                    }}
+                  >
+                    <div
+                      className="text-3xl font-bold text-white mb-1"
+                      style={{ color: goldColor }}
+                    >
+                      {stat.number}
+                    </div>
+                    <div className="text-xs text-white/80 font-medium leading-tight">
+                      {stat.label}
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+
               <motion.div
                 className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
                 initial={{ opacity: 0, y: 20 }}
@@ -1239,7 +1276,6 @@ export default function HomePage() {
             <motion.div
               className="md:col-span-2 lg:col-span-2 lg:row-span-2 relative group"
               variants={fadeInUp}
-           
             >
               <div className="relative aspect-[4/3] lg:aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl">
                 {/* Animated background glow */}
@@ -1254,7 +1290,6 @@ export default function HomePage() {
 
                   {/* Overlay with subtle gradient */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
                 </div>
 
                 {/* Decorative elements */}
@@ -1274,19 +1309,14 @@ export default function HomePage() {
                 <div className="relative h-full bg-gradient-to-br from-purple-100 to-pink-100 rounded-2xl overflow-hidden border-3 border-white shadow-lg group-hover:shadow-xl transition-shadow duration-500">
                   <img
                     src="/testimonials/with-clients.JPG"
-               
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
 
                   <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
                 </div>
               </div>
             </motion.div>
-
           </motion.div>
-
-    
         </div>
       </section>
 
