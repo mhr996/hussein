@@ -139,18 +139,18 @@ export default function CountrySelector({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-4 hover:bg-white/5 transition-colors duration-200 h-full"
+        className="flex items-center gap-1 md:gap-2 px-2 md:px-3 py-4 hover:bg-white/5 transition-colors duration-200 h-full"
       >
         <img
           src={getFlagUrl(value.code)}
           alt={value.name}
-          className="w-6 h-4 object-cover rounded-sm shadow-sm"
+          className="w-5 h-3 md:w-6 md:h-4 object-cover rounded-sm shadow-sm flex-shrink-0"
         />
-        <span className="font-semibold text-white text-sm whitespace-nowrap">
+        <span className="font-semibold text-white text-xs md:text-sm whitespace-nowrap">
           {value.dialCode}
         </span>
         <ChevronDown
-          className={`w-4 h-4 text-gray-300 transition-transform duration-200 ${
+          className={`w-3 h-3 md:w-4 md:h-4 text-gray-300 transition-transform duration-200 flex-shrink-0 ${
             isOpen ? "rotate-180" : ""
           }`}
         />

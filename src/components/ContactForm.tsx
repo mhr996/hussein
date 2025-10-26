@@ -200,7 +200,7 @@ export default function ContactForm() {
         >
           <div className="relative w-full rounded-2xl bg-white/10 backdrop-blur-lg border-2 border-white/20 focus-within:border-blue-400/60 focus-within:bg-white/20 transition-all duration-300 shadow-xl group-hover:shadow-2xl">
             <div className="flex items-center" dir="ltr">
-              <div className="flex-shrink-0 border-l border-white/20 self-stretch flex items-center">
+              <div className="flex-shrink-0 border-l border-white/20 self-stretch flex items-center min-w-0">
                 <CountrySelector
                   value={selectedCountry}
                   onChange={setSelectedCountry}
@@ -212,7 +212,7 @@ export default function ContactForm() {
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="501234567"
-                className="flex-1 px-6 py-4 bg-transparent border-none focus:outline-none text-white placeholder-gray-400 text-lg"
+                className="flex-1 px-3 md:px-6 py-4 bg-transparent border-none focus:outline-none text-white placeholder-gray-400 text-lg min-w-0"
                 style={{ lineHeight: "2", minHeight: "56px" }}
                 required
               />
