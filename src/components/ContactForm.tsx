@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { content } from "../content/arabic";
 import { CheckCircle, AlertCircle } from "lucide-react";
 import { useSuccessPopup } from "../contexts/SuccessPopupContext";
+import CountrySelector, { countries, type Country } from "./CountrySelector";
 
 interface FormData {
   firstName: string;
@@ -30,6 +31,9 @@ export default function ContactForm() {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<FormStatus>({ type: null, message: "" });
   const { setShowSuccessPopup } = useSuccessPopup();
+  const [selectedCountry, setSelectedCountry] = useState<Country>(
+    countries.find((c) => c.code === "AE") || countries[0]
+  );
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -47,11 +51,13 @@ export default function ContactForm() {
     setStatus({ type: null, message: "" });
 
     try {
+      const fullPhoneNumber = `${selectedCountry.dialCode}${formData.phone}`;
+
       console.log("[CONTACT_FORM] Starting form submission...", {
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
-        hasPhone: !!formData.phone,
+        phone: fullPhoneNumber,
         hasMessage: !!formData.message,
       });
 
@@ -60,7 +66,10 @@ export default function ContactForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          phone: fullPhoneNumber,
+        }),
       });
 
       console.log("[CONTACT_FORM] Response received:", {
@@ -189,17 +198,27 @@ export default function ContactForm() {
           whileFocus={{ scale: 1.02 }}
           transition={{ duration: 0.2 }}
         >
-          <input
-            type="tel"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            placeholder={content.contact.form.phone}
-            className="w-full px-6 py-4 rounded-2xl bg-white/10 backdrop-blur-lg border-2 border-white/20 focus:border-blue-400/60 focus:bg-white/20 focus:outline-none transition-all duration-300 text-white placeholder-gray-300 text-lg shadow-xl group-hover:shadow-2xl flex items-center placeholder:text-right"
-            style={{ lineHeight: "2", minHeight: "56px" }}
-            required
-          />
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+          <div className="relative w-full rounded-2xl bg-white/10 backdrop-blur-lg border-2 border-white/20 focus-within:border-blue-400/60 focus-within:bg-white/20 transition-all duration-300 shadow-xl group-hover:shadow-2xl">
+            <div className="flex items-center" dir="ltr">
+              <div className="flex-shrink-0 border-l border-white/20 self-stretch flex items-center">
+                <CountrySelector
+                  value={selectedCountry}
+                  onChange={setSelectedCountry}
+                />
+              </div>
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder="501234567"
+                className="flex-1 px-6 py-4 bg-transparent border-none focus:outline-none text-white placeholder-gray-400 text-lg"
+                style={{ lineHeight: "2", minHeight: "56px" }}
+                required
+              />
+            </div>
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+          </div>
         </motion.div>
       </div>
 
@@ -254,7 +273,7 @@ export default function ContactForm() {
             </span>
             {!loading && (
               <motion.div
-                className="w-3 h-3 hidden lg:block bg-white rounded-full not-last:"
+                className="w-3 h-3 bg-white rounded-full"
                 animate={{ scale: [1, 1.3, 1] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
               />
